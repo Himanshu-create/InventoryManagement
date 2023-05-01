@@ -43,13 +43,21 @@ namespace InventoryManagement.Controllers
             }
 
 
-
+            _Connection.Close();
             return allProd;
         }
         // GET: ProductAController
         public ActionResult Index()
         {
-            return View(getAllProduct());
+            if(globalVar.id == 1)
+            {
+                return View(getAllProduct());
+            }
+            else
+            {
+                return RedirectToAction("Index", "ProductU");
+            }
+            
         }
 
         // GET: ProductAController/Details/5
@@ -58,19 +66,32 @@ namespace InventoryManagement.Controllers
             return View();
         }
 
+
+         
         // GET: ProductAController/Create
         public ActionResult Create()
         {
             return View();
         }
 
+
+        void CreateProduct(ProductModel prod)
+        {
+            _Connection.Open();
+            SqlCommand cmd = _Connection.CreateCommand();
+            cmd.CommandText = $"insert into product values ('{prod.pname}', '{prod.pcat}', '{prod.brand}', '{prod.desc}', 0, {prod.avl})";
+            var n = cmd.ExecuteNonQuery();
+            _Connection.Close();
+        }
+
         // POST: ProductAController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(ProductModel prod)
         {
             try
             {
+                CreateProduct(prod);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -82,16 +103,34 @@ namespace InventoryManagement.Controllers
         // GET: ProductAController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            return View(getProdId(id));
         }
 
+        void editProd(ProductModel prod, int id)
+        {
+            _Connection.Open();
+            SqlCommand cmd = _Connection.CreateCommand();
+            cmd.CommandText = $"UPDATE product SET pname = '{prod.pname}', pcat = '{prod.pcat}', brand = '{prod.brand}', pdesc = '{prod.desc}', soldsofar = {prod.sold}, avl = {prod.avl} WHERE pid = {id}";
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch(Exception e)
+            {
+
+                Console.WriteLine(e.Message.ToString());
+            }
+            _Connection.Close();
+
+        }
         // POST: ProductAController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id,ProductModel prod)
         {
             try
             {
+                editProd(prod, id);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -100,10 +139,49 @@ namespace InventoryManagement.Controllers
             }
         }
 
+        public ProductModel getProdId(int id)
+        {
+            ProductModel prod = new();
+            Console.WriteLine(id);
+            _Connection.Open();
+            SqlCommand cmd = _Connection.CreateCommand();
+            cmd.CommandText = $"Select * from product where pid = {id}";
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+
+                prod.pid = (int)reader["pid"];
+                prod.pname = (string)reader["pname"];
+                prod.pcat = (string)reader["pcat"];
+                prod.brand = (string)reader["brand"];
+                prod.desc = (string)reader["pdesc"];
+                prod.sold = (int)reader["soldsofar"];
+                prod.avl = (int)reader["avl"];
+
+            }
+
+
+            _Connection.Close();
+
+            return prod;
+        }
         // GET: ProductAController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            return View(getProdId(id));
+        }
+
+        void deleteProd(int id)
+        {
+            ProductModel prod = new();
+            Console.WriteLine(id);
+            _Connection.Open();
+            SqlCommand cmd = _Connection.CreateCommand();
+            cmd.CommandText = $"Delete from product where pid = {id}";
+            var n = cmd.ExecuteNonQuery();
+
+            _Connection.Close();
         }
 
         // POST: ProductAController/Delete/5
@@ -113,6 +191,7 @@ namespace InventoryManagement.Controllers
         {
             try
             {
+                deleteProd(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

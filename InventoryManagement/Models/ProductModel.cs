@@ -1,5 +1,15 @@
 ﻿namespace InventoryManagement.Models
 {
+
+    public enum prodCat
+    {
+        Headphone,
+        Speaker,
+        Microphone,
+        Stands,
+        Instruments,
+        Others
+    }
     public class ProductModel
     {
         public int pid { get; set; }

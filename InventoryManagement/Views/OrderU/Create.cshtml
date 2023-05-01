@@ -1,0 +1,54 @@
+﻿@model InventoryManagement.Models.OrdersModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Your Order</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="uidd" class="control-label">Your ID : </label>
+                @globalVar.id
+            </div>
+            <div class="form-group">
+                <label asp-for="pid" class="control-label">Product ID : </label>
+                @globalVar.pid
+            </div>
+
+            <div class="form-group">
+                <label asp-for="pid" class="control-label">Product Name : </label>
+                @globalVar.pname
+            </div>
+
+            <div class="form-group">
+                <label asp-for="pid" class="control-label">Availible Quantity</label>
+                @globalVar.pavl
+            </div>
+
+            <div class="form-group">
+                <label asp-for="quantity" class="control-label">Enter the Qunatity to Order</label>
+                <input type="number" max="@globalVar.pavl" min="1" asp-for="quantity" class="form-control" />
+                <span asp-validation-for="quantity" class="text-danger"></span>
+            </div>
+            
+            
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,64 @@
+﻿@model InventoryManagement.Models.ProductModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ProductModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="pname" class="control-label">Product Name</label>
+                <input asp-for="pname" class="form-control" />
+                <span asp-validation-for="pname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="pcat" class="control-label">Product Category</label>
+                <!-- <input asp-for="pcat" class="form-control" /> -->
+                <select asp-for="pcat" class="form-control">
+                    <option value="Headphone">Headphone</option>
+                    <option value="Speaker">Speaker</option>
+                    <option value="Stand">Stand</option>
+                    <option value="Microphone">Microphone</option>
+                    <option value="Instruments">Instruments</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span asp-validation-for="pcat" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="brand" class="control-label">Brand</label>
+                <input asp-for="brand" class="form-control" />
+                <span asp-validation-for="brand" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="desc" class="control-label">Descriptions</label>
+                <input asp-for="desc" class="form-control" />
+                <span asp-validation-for="desc" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <label asp-for="avl" class="control-label">In Stock</label>
+                <input asp-for="avl" class="form-control" />
+                <span asp-validation-for="avl" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
