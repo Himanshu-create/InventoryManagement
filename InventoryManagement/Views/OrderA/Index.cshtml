@@ -1,0 +1,65 @@
+﻿@model IEnumerable<InventoryManagement.Models.OrdersModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.oid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.uidd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.pid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ostatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.odate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.oid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.uidd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.pid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ostatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.odate)
+            </td>
+            <td>
+                @Html.ActionLink("Update Order", "UpdateOrder", new { id = item.oid }) |
+                @Html.ActionLink("View User", "ViewUser", new { id = item.uidd }) |
+                @Html.ActionLink("View Product", "ViewProduct", new { id = item.pid })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

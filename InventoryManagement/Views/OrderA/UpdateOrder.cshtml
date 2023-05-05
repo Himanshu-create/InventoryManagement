@@ -1,0 +1,61 @@
+﻿@model InventoryManagement.Models.OrdersModel
+
+@{
+    ViewData["Title"] = "UpdateOrder";
+}
+
+<h1>UpdateOrder</h1>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdateOrder">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="oid" class="control-label">Order ID : </label>
+                @Model.oid
+            </div>
+            <div class="form-group">
+                <label asp-for="uidd" class="control-label">User ID : </label>
+                @Model.uidd
+            </div>
+            <div class="form-group">
+                <label asp-for="pid" class="control-label">Product ID : </label>
+                @Model.pid
+            </div>
+            <div class="form-group">
+                <label asp-for="quantity" class="control-label">Quantity : </label>
+                @Model.quantity
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="odate" class="control-label">Order Date</label>
+                @Model.odate
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ostatus" class="control-label">Order Status</label>
+                <select asp-for="ostatus" class="form-control">
+                    <option value="Order Received">Order Received</option>
+                    <option value="Order Confirmed">Order Confirmed</option>
+                    <option value="Order Processed">Order Processed</option>
+                    <option value="Order Delivered">Order Delivered</option>
+                </select>
+                <span asp-validation-for="ostatus" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<InventoryManagement.Models.OrdersModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Order ID
+            </th>
+
+            <th>
+                Product ID
+            </th>
+            <th>
+                Quantity Ordered
+            </th>
+            <th>
+               Order Status
+            </th>
+            <th>
+                Date of Order
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.oid)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.pid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ostatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.odate)
+            </td>
+            <td>
+                @Html.ActionLink("View Product", "ViewProduct", new { id = item.pid }) |
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
