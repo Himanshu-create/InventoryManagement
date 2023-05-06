@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client;
+using Newtonsoft.Json;
 using System.Data;
 using System.Net.Http;
 using System.Net.Http.Formatting;
@@ -52,47 +54,50 @@ namespace InventoryManagement.Controllers
 
         
         // GET: ProductAController
-        public ActionResult Index()
+        public ActionResult Index2()
         {
             if(globalVar.id == 1)
             {
-                IEnumerable<ProductModel> prods = null;
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("https://localhost:7143/api/callme/");
-                    var responseTask = client.GetAsync("GetDataProducts");
-                    responseTask.Wait();
-                    Console.WriteLine("Inside if == 1");
-                    var result = responseTask.Result;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        var readTask = result.Content.ReadAsAsync<IList<ProductModel>>();
-                        readTask.Wait();
-                        Console.WriteLine("Inside is successfull");
-                        prods = readTask.Result;
-                        foreach(var e in prods)
-                        {
-                            Console.WriteLine(e);
-                        }
-                    }
-                    else
-                    {
-                        Console.Write("Not success : ");
-                        Console.WriteLine(result);
-                        prods = Enumerable.Empty<ProductModel>();
-                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
-                    }
-                }
+
+                string baseUrl = "https://localhost:7143/api/callme/";
+                
+
                 return View(getAllProduct());
-                Console.WriteLine("Inside API");
-                Console.WriteLine(prods);
-                return View(prods);
+                
             }
             else
             {
                 return RedirectToAction("Index", "ProductU");
             }
             
+        }
+
+        public async Task<ActionResult> Index()
+        {
+            if (globalVar.id == 1)
+            {
+                string Baseurl = "https://localhost:7143/";
+                List<ProductModel> prods = new List<ProductModel>();
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(Baseurl);
+                    client.DefaultRequestHeaders.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage Res = await client.GetAsync("api/callme");
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+                        prods = JsonConvert.DeserializeObject<List<ProductModel>>(EmpResponse);
+                        return View(prods);
+                    }
+                    return View();
+                }
+
+            }
+            else
+            {
+                return RedirectToAction("Index", "ProductU");
+            }
         }
 
         // GET: ProductAController/Details/5
