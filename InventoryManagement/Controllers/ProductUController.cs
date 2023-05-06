@@ -86,6 +86,10 @@ namespace InventoryManagement.Controllers
         public  ActionResult PlaceOrder(int id)
         {
             globalVar.pid = id;
+            if(globalVar.id == -1)
+            {
+                return RedirectToAction("Login", "Profile");
+            }
             return RedirectToAction("Create", "OrderU");
         }
         // GET: ProductUController/Create

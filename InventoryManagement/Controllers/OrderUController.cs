@@ -47,6 +47,10 @@ namespace InventoryManagement.Controllers
             return View(getOrderID());
         }
 
+        public ActionResult ViewProduct(int id)
+        {
+            return RedirectToAction("Details", "ProductU", new {id = id});
+        }
         // GET: OrderUController/Details/5
         public ActionResult Details(int id)
         {

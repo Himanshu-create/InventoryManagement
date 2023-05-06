@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using NuGet.Packaging.Signing;
+using System;
 
 namespace InventoryManagement.Controllers
 {
@@ -35,6 +36,7 @@ namespace InventoryManagement.Controllers
                 ord.uidd = (int)reader["uidd"];
                 ords.Add(ord);
             }
+            ords.Sort(delegate (OrdersModel ps1, OrdersModel ps2) { return DateTime.Compare(ps2.odate, ps1.odate); });
 
             return ords;
         }

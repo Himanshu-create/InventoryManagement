@@ -64,6 +64,48 @@ namespace InventoryManagement.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Login(login log)
+        {
+            try
+            {
+                _Connection.Open();
+                SqlCommand cmd = _Connection.CreateCommand();
+                Console.WriteLine(log.email + log.password);
+
+                cmd.CommandText = $"Select * from users where emailid = '{log.email}'";
+                Console.WriteLine(cmd);
+                SqlDataReader reader = cmd.ExecuteReader();
+                //Console.WriteLine(log.password == (string)reader["pass"]);
+                while (reader.Read())
+                {
+                    if(log.password == (string)reader["pass"])
+                    {
+                        globalVar.id = (int)reader["uidd"];
+                        globalVar.uname = (string)reader["uname"];
+                        _Connection.Close();
+                        return RedirectToAction(nameof(Index)); 
+                    }
+                }
+                _Connection.Close();
+
+                return View();
+            }
+            catch(Exception ex)
+            {
+                _Connection.Close();
+                return View();
+            }
+        }
+
+
+        public ActionResult Logout(int id)
+        {
+            globalVar.uname = "LogIn";
+            globalVar.id = -1;
+            return RedirectToAction(nameof(Index));
+        }
         // GET: ProfileController/Details/5
         public ActionResult Details(int id)
         {
@@ -71,7 +113,7 @@ namespace InventoryManagement.Controllers
         }
 
         // GET: ProfileController/Create
-        public ActionResult Create()
+        public ActionResult CreateUser()
         {
             return View();
         }
@@ -79,14 +121,20 @@ namespace InventoryManagement.Controllers
         // POST: ProfileController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult CreateUser(UserModel user)
         {
             try
             {
+                _Connection.Open();
+                SqlCommand cmd = _Connection.CreateCommand();
+                cmd.CommandText = $"insert into users values ('{user.name}','{user.phoneNo}', '{user.city}', '{user.emailid}','{user.pass1}','User')";
+                var r = cmd.ExecuteNonQuery();
+                _Connection.Close();
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                _Connection.Close();
                 return View();
             }
         }
