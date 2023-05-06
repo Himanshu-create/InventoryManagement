@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using NuGet.Packaging.Signing;
 
 namespace InventoryManagement.Controllers
 {
@@ -31,7 +32,7 @@ namespace InventoryManagement.Controllers
                 ord.quantity = (int)reader["quantity"];
                 ord.ostatus = (string)reader["ostatus"];
                 ord.odate = (DateTime)reader["odate"];
-
+                ord.uidd = (int)reader["uidd"];
                 ords.Add(ord);
             }
 
@@ -72,7 +73,39 @@ namespace InventoryManagement.Controllers
 
         public ActionResult ViewProduct(int id)
         {
-            return RedirectToAction($"deleteProd/{id}", "ProductA");
+            return RedirectToAction("delete", "ProductA", new { id = id });
+        }
+
+
+        public UserModel getUser(int id)
+        {
+            UserModel user = new();
+            _Connection.Open();
+            SqlCommand cmd = _Connection.CreateCommand();
+            cmd.CommandText = $"Select * from users where uidd = {id}";
+            try {
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    user.uidd = (int)reader["uidd"];
+                    user.name = (string)reader["uname"];
+                    user.phoneNo = (string)reader["phoneNo"];
+                    user.emailid = (string)reader["emailid"];
+                    user.city = (string)reader["city"];
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString);
+            }
+            
+            _Connection.Close();
+            return user;
+
+        }
+        public ActionResult ViewUser(int id)
+        {
+            return View(getUser(id));
         }
         public OrdersModel getOrderID(int id)
         {

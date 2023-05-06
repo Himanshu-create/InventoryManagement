@@ -4,31 +4,29 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>All Orders</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.oid)
+                Order ID
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.uidd)
+                User ID
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.pid)
+                Product ID
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.quantity)
+                Quantity
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ostatus)
+                Order Status
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.odate)
+                Order Date
             </th>
             <th></th>
         </tr>
@@ -55,9 +53,9 @@
                 @Html.DisplayFor(modelItem => item.odate)
             </td>
             <td>
-                @Html.ActionLink("Update Order", "UpdateOrder", new { id = item.oid }) |
-                @Html.ActionLink("View User", "ViewUser", new { id = item.uidd }) |
-                @Html.ActionLink("View Product", "ViewProduct", new { id = item.pid })
+                    <button color="green"> @Html.ActionLink("Update Order", "UpdateOrder", new { id = item.oid }) </button> | 
+                    <button>@Html.ActionLink("View User", "ViewUser", new { id = item.uidd }) </button> |
+                    <button>@Html.ActionLink("View Product", "ViewProduct", new { id = item.pid }) </button>
             </td>
         </tr>
 }

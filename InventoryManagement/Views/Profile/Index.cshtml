@@ -1,0 +1,44 @@
+﻿@model InventoryManagement.Models.UserModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Profile</h1>
+
+<div>
+    <h4>User ID: @Html.DisplayFor(model => model.uidd)</h4>
+    <hr />
+    <dl class="row">
+        
+        <dt class = "col-sm-2">
+           Name
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.name)
+        </dd>
+        <dt class = "col-sm-2">
+            Phone Number
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.phoneNo)
+        </dd>
+        <dt class = "col-sm-2">
+            City
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.city)
+        </dd>
+        <dt class = "col-sm-2">
+            Email ID
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.emailid)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new {  id = Model.uidd  }) |
+    @Html.ActionLink("Change Password", "ChangePassword", new {  id = Model.uidd  }) |
+    
+</div>

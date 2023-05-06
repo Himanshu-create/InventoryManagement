@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Net.Http;
+using System.Net.Http.Formatting;
 
 namespace InventoryManagement.Controllers
 {
     public class ProductAController : Controller
     {
+
 
         IConfiguration _configuration;
         SqlConnection _Connection;
@@ -18,7 +21,7 @@ namespace InventoryManagement.Controllers
         }
 
         public List<ProductModel> getAllProduct()
-        {
+        { 
             List<ProductModel> allProd = new();
 
             _Connection.Open();
@@ -46,12 +49,44 @@ namespace InventoryManagement.Controllers
             _Connection.Close();
             return allProd;
         }
+
+        
         // GET: ProductAController
         public ActionResult Index()
         {
             if(globalVar.id == 1)
             {
+                IEnumerable<ProductModel> prods = null;
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("https://localhost:7143/api/callme/");
+                    var responseTask = client.GetAsync("GetDataProducts");
+                    responseTask.Wait();
+                    Console.WriteLine("Inside if == 1");
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<IList<ProductModel>>();
+                        readTask.Wait();
+                        Console.WriteLine("Inside is successfull");
+                        prods = readTask.Result;
+                        foreach(var e in prods)
+                        {
+                            Console.WriteLine(e);
+                        }
+                    }
+                    else
+                    {
+                        Console.Write("Not success : ");
+                        Console.WriteLine(result);
+                        prods = Enumerable.Empty<ProductModel>();
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    }
+                }
                 return View(getAllProduct());
+                Console.WriteLine("Inside API");
+                Console.WriteLine(prods);
+                return View(prods);
             }
             else
             {
