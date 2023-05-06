@@ -90,6 +90,14 @@ namespace InventoryManagement.Controllers
             cmd.CommandText = $"insert into orders values ({globalVar.id}, {globalVar.pid}, {ord.quantity}, 'Order Received', '{DateTime.Now}')";
             var n = cmd.ExecuteNonQuery();
             _Connection.Close();
+
+            _Connection.Open();
+            SqlCommand cmd2 = new SqlCommand("DEC_QUANTITY", _Connection);
+            cmd2.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd2.Parameters.AddWithValue("@pid", globalVar.pid);
+            cmd2.Parameters.AddWithValue("@q", ord.quantity);
+            var r = cmd2.ExecuteNonQuery();
+            _Connection.Close();
         }
 
         // POST: OrderUController/Create

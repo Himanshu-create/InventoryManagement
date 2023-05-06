@@ -76,6 +76,7 @@ namespace InventoryManagement.Controllers
         {
             if (globalVar.id == 1)
             {
+                Console.WriteLine("Inside API CAll");
                 string Baseurl = "https://localhost:7143/";
                 List<ProductModel> prods = new List<ProductModel>();
                 using (var client = new HttpClient())
